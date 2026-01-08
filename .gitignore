@@ -1,0 +1,8 @@
+# Milvus Lite database files
+milvus_lite_*.db
+
+# (optional but recommended) Python cache
+__pycache__/
+*.pyc
+
+.env
