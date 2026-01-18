@@ -21,6 +21,7 @@ dependencies = [
     "torch>=2.0.0",
     "torchvision>=0.15.0",
     "transformers>=4.30.0",
+    "uvicorn>=0.36.0",
     "yt-dlp>=2024.12.13",
     "zep-cloud>=3.4.3",
     "zep-crewai>=1.1.1",

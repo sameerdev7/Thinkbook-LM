@@ -15,6 +15,162 @@ load_dotenv()
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+# --- API KEY CHECKING ---
+def check_api_keys():
+    """Check which API keys are configured"""
+    keys_status = {
+        'OPENAI_API_KEY': bool(os.getenv("OPENAI_API_KEY")),
+        'ASSEMBLYAI_API_KEY': bool(os.getenv("ASSEMBLYAI_API_KEY")),
+        'FIRECRAWL_API_KEY': bool(os.getenv("FIRECRAWL_API_KEY")),
+        'ZEP_API_KEY': bool(os.getenv("ZEP_API_KEY"))
+    }
+    return keys_status
+
+def show_setup_screen():
+    """Display setup instructions when API keys are missing"""
+    st.markdown("""
+    <style>
+        .setup-container {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            border: 2px solid #6366f1;
+            border-radius: 20px;
+            padding: 3rem;
+            margin: 2rem 0;
+            text-align: center;
+        }
+        .setup-title {
+            background: linear-gradient(135deg, #a78bfa 0%, #6366f1 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+        }
+        .setup-subtitle {
+            color: #94a3b8;
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+        }
+        .key-card {
+            background: #1e293b;
+            border: 1px solid #334155;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            text-align: left;
+        }
+        .key-required {
+            color: #ef4444;
+            font-weight: 600;
+        }
+        .key-optional {
+            color: #eab308;
+            font-weight: 600;
+        }
+        .key-configured {
+            color: #10b981;
+            font-weight: 600;
+        }
+        .setup-code {
+            background: #0f172a;
+            border: 1px solid #334155;
+            border-radius: 8px;
+            padding: 1rem;
+            font-family: monospace;
+            color: #e2e8f0;
+            margin: 1rem 0;
+            text-align: left;
+        }
+    </style>
+    """, unsafe_allow_html=True)
+    
+    st.markdown("""
+    <div class="setup-container">
+        <h1 class="setup-title">⚙️ Setup Required</h1>
+        <p class="setup-subtitle">Configure your API keys to unlock ThinkbookLM's full potential</p>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    keys_status = check_api_keys()
+    
+    # OpenAI Key (Required)
+    status_class = "key-configured" if keys_status['OPENAI_API_KEY'] else "key-required"
+    status_text = "✅ Configured" if keys_status['OPENAI_API_KEY'] else "❌ Required"
+    st.markdown(f"""
+    <div class="key-card">
+        <h3>OpenAI API Key <span class="{status_class}">{status_text}</span></h3>
+        <p>Required for: Embeddings, RAG responses, and podcast script generation</p>
+        <p>Get your key at: <a href="https://platform.openai.com/api-keys" target="_blank">OpenAI API Keys</a></p>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    # AssemblyAI Key (Optional)
+    status_class = "key-configured" if keys_status['ASSEMBLYAI_API_KEY'] else "key-optional"
+    status_text = "✅ Configured" if keys_status['ASSEMBLYAI_API_KEY'] else "⚠️ Optional"
+    st.markdown(f"""
+    <div class="key-card">
+        <h3>AssemblyAI API Key <span class="{status_class}">{status_text}</span></h3>
+        <p>Required for: Audio transcription and YouTube video processing</p>
+        <p>Get your key at: <a href="https://www.assemblyai.com/dashboard/signup" target="_blank">AssemblyAI</a></p>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    # Firecrawl Key (Optional)
+    status_class = "key-configured" if keys_status['FIRECRAWL_API_KEY'] else "key-optional"
+    status_text = "✅ Configured" if keys_status['FIRECRAWL_API_KEY'] else "⚠️ Optional"
+    st.markdown(f"""
+    <div class="key-card">
+        <h3>Firecrawl API Key <span class="{status_class}">{status_text}</span></h3>
+        <p>Required for: Web scraping functionality</p>
+        <p>Get your key at: <a href="https://www.firecrawl.dev" target="_blank">Firecrawl</a></p>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    # Zep Key (Optional)
+    status_class = "key-configured" if keys_status['ZEP_API_KEY'] else "key-optional"
+    status_text = "✅ Configured" if keys_status['ZEP_API_KEY'] else "⚠️ Optional"
+    st.markdown(f"""
+    <div class="key-card">
+        <h3>Zep Cloud API Key <span class="{status_class}">{status_text}</span></h3>
+        <p>Required for: Conversation memory across sessions</p>
+        <p>Get your key at: <a href="https://www.getzep.com" target="_blank">Zep Cloud</a></p>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    st.markdown("---")
+    st.markdown("### 🚀 How to Configure on Hugging Face Spaces")
+    st.markdown("""
+    <div class="setup-code">
+    1. Go to your Space Settings<br>
+    2. Navigate to "Variables and secrets"<br>
+    3. Add each API key as a new secret:<br>
+       • Name: OPENAI_API_KEY<br>
+       • Value: your-api-key-here<br>
+    4. Save and restart the Space
+    </div>
+    """, unsafe_allow_html=True)
+    
+    st.markdown("### 🔧 How to Configure Locally")
+    st.markdown("""
+    <div class="setup-code">
+    # Create a .env file in the project root:<br>
+    OPENAI_API_KEY=your-key-here<br>
+    ASSEMBLYAI_API_KEY=your-key-here<br>
+    FIRECRAWL_API_KEY=your-key-here<br>
+    ZEP_API_KEY=your-key-here<br>
+    <br>
+    # Then restart the application
+    </div>
+    """, unsafe_allow_html=True)
+    
+    # Show demo mode option
+    st.markdown("---")
+    st.info("💡 **Demo Mode**: You can explore the UI without API keys, but features requiring external services will be disabled.")
+    
+    if st.button("🎬 Continue in Demo Mode", type="primary"):
+        st.session_state.demo_mode = True
+        st.rerun()
+
 # --- STYLING & BRANDING ---
 def apply_custom_design():
     st.markdown("""
@@ -186,10 +342,21 @@ def apply_custom_design():
             padding: 2rem;
             border: 1px solid #334155;
         }
+        
+        .demo-badge {
+            background: rgba(234, 179, 8, 0.1);
+            border: 1px solid #eab308;
+            color: #eab308;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            display: inline-block;
+        }
     </style>
     """, unsafe_allow_html=True)
 
-# --- PIPELINE IMPORTS ---
+# --- PIPELINE IMPORTS (with error handling) ---
 try:
     from src.document_processing.doc_processor import DocumentProcessor
     from src.embeddings.embedding_generator import EmbeddingGenerator
@@ -201,8 +368,10 @@ try:
     from src.web_scraping.web_scraper import WebScraper
     from src.podcast.script_generator import PodcastScriptGenerator
     from src.podcast.text_to_speech import PodcastTTSGenerator
+    IMPORTS_AVAILABLE = True
 except ImportError as e:
     logger.error(f"Import error: {e}. Ensure src/ directory is in path.")
+    IMPORTS_AVAILABLE = False
 
 # --- UTILITY FUNCTIONS ---
 def create_interactive_citations(response_text: str, sources_used: List[Dict[str, Any]]) -> str:
@@ -235,7 +404,6 @@ def create_interactive_citations(response_text: str, sources_used: List[Dict[str
             except Exception:
                 chunk_content = "Preview unavailable"
             
-            # Escaping for HTML
             c_esc = chunk_content.replace('"', '&quot;').replace('<', '&lt;').replace('>', '&gt;').replace('\n', '<br>')
             s_esc = source_info.replace('"', '&quot;')
             
@@ -256,6 +424,8 @@ def init_session_state():
     if 'chat_history' not in st.session_state: st.session_state.chat_history = []
     if 'session_id' not in st.session_state: st.session_state.session_id = str(uuid.uuid4())
     if 'pipeline_initialized' not in st.session_state: st.session_state.pipeline_initialized = False
+    if 'demo_mode' not in st.session_state: st.session_state.demo_mode = False
+    if 'api_keys_checked' not in st.session_state: st.session_state.api_keys_checked = False
 
 def reset_chat():
     try:
@@ -268,21 +438,41 @@ def reset_chat():
         st.error(f"Error resetting: {e}")
 
 def initialize_pipeline():
-    if st.session_state.pipeline_initialized: return True
+    if st.session_state.pipeline_initialized: 
+        return True
+    
+    if not IMPORTS_AVAILABLE:
+        st.error("❌ Core modules could not be imported. Check logs for details.")
+        return False
+    
     try:
         openai_key = os.getenv("OPENAI_API_KEY")
         assemblyai_key = os.getenv("ASSEMBLYAI_API_KEY")
         firecrawl_key = os.getenv("FIRECRAWL_API_KEY")
         zep_key = os.getenv("ZEP_API_KEY")
         
+        if not openai_key and not st.session_state.demo_mode:
+            return False
+        
         with st.spinner("Waking up ThinkbookLM..."):
             doc_processor = DocumentProcessor()
-            embedding_generator = EmbeddingGenerator()
-            vector_db = MilvusVectorDB(
-                db_path=f"./milvus_lite_{st.session_state.session_id[:8]}.db", 
-                collection_name=f"collection_{st.session_state.session_id[:8]}"
-            )
-            rag_generator = RAGGenerator(embedding_generator=embedding_generator, vector_db=vector_db, openai_api_key=openai_key)
+            embedding_generator = EmbeddingGenerator() if openai_key else None
+            
+            vector_db = None
+            if openai_key:
+                vector_db = MilvusVectorDB(
+                    db_path=f"./milvus_lite_{st.session_state.session_id[:8]}.db", 
+                    collection_name=f"collection_{st.session_state.session_id[:8]}"
+                )
+            
+            rag_generator = None
+            if openai_key and embedding_generator and vector_db:
+                rag_generator = RAGGenerator(
+                    embedding_generator=embedding_generator, 
+                    vector_db=vector_db, 
+                    openai_api_key=openai_key
+                )
+            
             audio_transcriber = AudioTranscriber(assemblyai_key) if assemblyai_key else None
             youtube_transcriber = YouTubeTranscriber(assemblyai_key) if assemblyai_key else None
             web_scraper = WebScraper(firecrawl_key) if firecrawl_key else None
@@ -291,28 +481,44 @@ def initialize_pipeline():
             tts_gen = None
             try:
                 tts_gen = PodcastTTSGenerator()
-            except: logger.warning("TTS Engine not found.")
+            except: 
+                logger.warning("TTS Engine not found.")
 
             memory = None
-            if zep_key:
-                memory = NotebookMemoryLayer(user_id="think_user", session_id=st.session_state.session_id, create_new_session=True)
+            if zep_key and openai_key:
+                memory = NotebookMemoryLayer(
+                    user_id="think_user", 
+                    session_id=st.session_state.session_id, 
+                    create_new_session=True
+                )
             
             st.session_state.pipeline = {
-                'doc_processor': doc_processor, 'embedding_generator': embedding_generator,
-                'vector_db': vector_db, 'rag_generator': rag_generator,
-                'audio_transcriber': audio_transcriber, 'youtube_transcriber': youtube_transcriber,
-                'web_scraper': web_scraper, 'podcast_script_generator': podcast_gen,
-                'podcast_tts_generator': tts_gen, 'memory': memory
+                'doc_processor': doc_processor, 
+                'embedding_generator': embedding_generator,
+                'vector_db': vector_db, 
+                'rag_generator': rag_generator,
+                'audio_transcriber': audio_transcriber, 
+                'youtube_transcriber': youtube_transcriber,
+                'web_scraper': web_scraper, 
+                'podcast_script_generator': podcast_gen,
+                'podcast_tts_generator': tts_gen, 
+                'memory': memory
             }
             st.session_state.pipeline_initialized = True
             return True
     except Exception as e:
         st.error(f"Pipeline failure: {e}")
+        logger.error(f"Pipeline initialization error: {e}", exc_info=True)
         return False
 
 # --- PROCESSING LOGIC ---
 def process_uploaded_files(uploaded_files):
     pipeline = st.session_state.pipeline
+    
+    if not pipeline['embedding_generator'] or not pipeline['vector_db']:
+        st.error("❌ Document processing requires OpenAI API key")
+        return
+    
     for uploaded_file in uploaded_files:
         with tempfile.NamedTemporaryFile(delete=False, suffix=f".{uploaded_file.name.split('.')[-1]}") as tmp:
             tmp.write(uploaded_file.getbuffer())
@@ -320,6 +526,9 @@ def process_uploaded_files(uploaded_files):
         
         try:
             if uploaded_file.type.startswith('audio/'):
+                if not pipeline['audio_transcriber']:
+                    st.warning(f"⚠️ Skipping {uploaded_file.name}: Audio transcription requires AssemblyAI API key")
+                    continue
                 chunks = pipeline['audio_transcriber'].transcribe_audio(temp_path)
                 s_type = "Audio"
             else:
@@ -337,12 +546,20 @@ def process_uploaded_files(uploaded_files):
                     'size': f"{len(uploaded_file.getbuffer())/1024:.1f} KB", 'chunks': len(chunks),
                     'uploaded_at': time.strftime("%H:%M")
                 })
+        except Exception as e:
+            st.error(f"Error processing {uploaded_file.name}: {e}")
         finally:
             os.unlink(temp_path)
 
 # --- UI COMPONENTS ---
 def render_sidebar():
     with st.sidebar:
+        # Demo mode indicator
+        if st.session_state.demo_mode:
+            st.markdown('<div class="demo-badge">🎬 DEMO MODE</div>', unsafe_allow_html=True)
+            st.caption("Some features disabled without API keys")
+            st.markdown("---")
+        
         st.markdown('<div class="sidebar-header">📚 Knowledge Base</div>', unsafe_allow_html=True)
         if st.session_state.sources:
             for source in st.session_state.sources:
@@ -354,45 +571,79 @@ def render_sidebar():
                 ''', unsafe_allow_html=True)
         else:
             st.info("No sources added yet.")
+        
+        st.markdown("---")
+        if st.button("🔄 Reset Session"):
+            reset_chat()
 
 def render_add_sources():
     st.markdown("### 📂 Expand your Library")
-    uploaded = st.file_uploader("Upload Documents or Audio", accept_multiple_files=True, type=['pdf','txt','mp3','wav','md'])
-    if uploaded and st.button("Process Assets"):
+    
+    if st.session_state.demo_mode:
+        st.warning("⚠️ Document processing requires OpenAI API key. Please configure API keys to use this feature.")
+    
+    uploaded = st.file_uploader(
+        "Upload Documents or Audio", 
+        accept_multiple_files=True, 
+        type=['pdf','txt','mp3','wav','md'],
+        disabled=st.session_state.demo_mode
+    )
+    
+    if uploaded and st.button("Process Assets", disabled=st.session_state.demo_mode):
         process_uploaded_files(uploaded)
         st.rerun()
     
     t1, t2 = st.tabs(["🌐 Web", "🎥 Video"])
     with t1:
-        url = st.text_input("Website URL")
-        if st.button("Scrape Site") and url:
-            # Simplified trigger for logic
-            st.info("Scraping started...") 
+        url = st.text_input("Website URL", disabled=st.session_state.demo_mode)
+        if st.button("Scrape Site", disabled=st.session_state.demo_mode) and url:
+            if not st.session_state.pipeline['web_scraper']:
+                st.error("❌ Web scraping requires Firecrawl API key")
+            else:
+                st.info("Scraping started...") 
     with t2:
-        yt = st.text_input("YouTube URL")
-        if st.button("Transcribe Video") and yt:
-            st.info("Downloading transcript...")
+        yt = st.text_input("YouTube URL", disabled=st.session_state.demo_mode)
+        if st.button("Transcribe Video", disabled=st.session_state.demo_mode) and yt:
+            if not st.session_state.pipeline['youtube_transcriber']:
+                st.error("❌ YouTube transcription requires AssemblyAI API key")
+            else:
+                st.info("Downloading transcript...")
 
 def render_chat():
     st.markdown("### 💬 Research Insights")
+    
+    if st.session_state.demo_mode:
+        st.info("💡 Chat functionality requires OpenAI API key. Configure API keys to start chatting with your documents.")
+    
     for msg in st.session_state.chat_history:
         div_class = "user-message" if msg['role'] == 'user' else "assistant-message"
         content = msg.get('interactive_content', msg['content'])
         st.markdown(f'<div class="chat-message {div_class}">{content}</div>', unsafe_allow_html=True)
 
-    query = st.chat_input("Analyze your sources...")
+    query = st.chat_input("Analyze your sources...", disabled=st.session_state.demo_mode)
     if query:
+        if not st.session_state.pipeline['rag_generator']:
+            st.error("❌ Chat requires OpenAI API key")
+            return
+        
         st.session_state.chat_history.append({'role': 'user', 'content': query})
         with st.spinner("Synthesizing..."):
-            result = st.session_state.pipeline['rag_generator'].generate_response(query)
-            interactive = create_interactive_citations(result.response, result.sources_used)
-            st.session_state.chat_history.append({
-                'role': 'assistant', 'content': result.response, 'interactive_content': interactive
-            })
+            try:
+                result = st.session_state.pipeline['rag_generator'].generate_response(query)
+                interactive = create_interactive_citations(result.response, result.sources_used)
+                st.session_state.chat_history.append({
+                    'role': 'assistant', 'content': result.response, 'interactive_content': interactive
+                })
+            except Exception as e:
+                st.error(f"Error generating response: {e}")
         st.rerun()
 
 def render_studio():
     st.markdown("### 🎙️ Creative Studio")
+    
+    if st.session_state.demo_mode:
+        st.warning("⚠️ Podcast generation requires OpenAI API key. Configure API keys to use this feature.")
+    
     if not st.session_state.sources:
         st.warning("Add sources to unlock the Studio.")
         return
@@ -405,13 +656,16 @@ def render_studio():
     """, unsafe_allow_html=True)
     
     src_list = [s['name'] for s in st.session_state.sources]
-    selected = st.selectbox("Source Material", src_list)
+    selected = st.selectbox("Source Material", src_list, disabled=st.session_state.demo_mode)
     col1, col2 = st.columns(2)
-    with col1: style = st.selectbox("Style", ["Deep Dive", "Quick Summary", "Narrative"])
-    with col2: length = st.selectbox("Length", ["5 min", "15 min"])
+    with col1: style = st.selectbox("Style", ["Deep Dive", "Quick Summary", "Narrative"], disabled=st.session_state.demo_mode)
+    with col2: length = st.selectbox("Length", ["5 min", "15 min"], disabled=st.session_state.demo_mode)
     
-    if st.button("Generate Audio Episode"):
-        st.success("Drafting script and synthesizing voice...")
+    if st.button("Generate Audio Episode", disabled=st.session_state.demo_mode):
+        if not st.session_state.pipeline['podcast_script_generator']:
+            st.error("❌ Podcast generation requires OpenAI API key")
+        else:
+            st.success("Drafting script and synthesizing voice...")
 
 # --- MAIN APP ---
 def main():
@@ -419,8 +673,22 @@ def main():
     apply_custom_design()
     init_session_state()
     
-    if not initialize_pipeline(): st.stop()
+    # Check API keys on first load
+    if not st.session_state.api_keys_checked:
+        keys_status = check_api_keys()
+        if not keys_status['OPENAI_API_KEY'] and not st.session_state.demo_mode:
+            show_setup_screen()
+            st.session_state.api_keys_checked = True
+            return
+        st.session_state.api_keys_checked = True
+    
+    # Initialize pipeline
+    if not initialize_pipeline(): 
+        if not st.session_state.demo_mode:
+            show_setup_screen()
+            return
 
+    # Main app header
     st.markdown("""
     <div class="brand-container">
         <h1 class="brand-title">ThinkbookLM</h1>
