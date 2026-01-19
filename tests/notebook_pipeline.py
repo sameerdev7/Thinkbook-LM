@@ -149,7 +149,7 @@ def test_pipeline():
         pipeline = NotebookLMPipeline()
         
         # Test 1: Document Processing
-        logger.info("\n📄 TEST 1: Document Processing")
+        logger.info("\n TEST 1: Document Processing")
         test_documents = [
             # Add paths to your test files here
             # "sample.pdf",
@@ -174,12 +174,12 @@ def test_pipeline():
         logger.info("Audio test skipped (no sample file)")
         
         # Test 3: Web Scraping
-        logger.info("\n🌐 TEST 3: Web Scraping")
+        logger.info("\n TEST 3: Web Scraping")
         # pipeline.process_url("https://example.com")
         logger.info("Web scraping test skipped")
         
         # Test 4: Question Answering
-        logger.info("\n❓ TEST 4: Question Answering")
+        logger.info("\n TEST 4: Question Answering")
         
         test_questions = [
             "What is the main topic discussed in the documents?",
@@ -207,20 +207,20 @@ def test_pipeline():
         
         # Test 5: Memory Context
         if pipeline.memory:
-            logger.info("\n🧠 TEST 5: Memory Context")
+            logger.info("\n TEST 5: Memory Context")
             context = pipeline.memory.get_conversation_context()
             logger.info(f"Memory context available: {bool(context)}")
             if context:
                 logger.info(f"Context preview: {context[:200]}...")
         
         logger.info("\n" + "=" * 60)
-        logger.info("PIPELINE TEST COMPLETED SUCCESSFULLY! ✅")
+        logger.info("PIPELINE TEST COMPLETED SUCCESSFULLY! ")
         logger.info("=" * 60)
         
     except Exception as e:
         logger.error(f"Pipeline test failed: {e}")
         logger.info("\n" + "=" * 60)
-        logger.info("PIPELINE TEST FAILED ❌")
+        logger.info("PIPELINE TEST FAILED ")
         logger.info("=" * 60)
     
     finally:
@@ -229,21 +229,22 @@ def test_pipeline():
 
 
 if __name__ == "__main__":
-    required_keys = ["OPENAI_API_KEY"]
-    optional_keys = ["ASSEMBLYAI_API_KEY", "FIRECRAWL_API_KEY", "ZEP_API_KEY"]
+    required_keys = ["openai_api_key"]
+    optional_keys = ["assemblyai_api_key", "firecrawl_api_key", "zep_api_key"]
     
-    logger.info("Environment Check:")
+    logger.info("Environment check:")
+    
     for key in required_keys:
-        status = "✅" if os.getenv(key) else "❌ REQUIRED"
+        status = "[OK]" if os.getenv(key) else "[MISSING]"
         logger.info(f"  {key}: {status}")
     
     for key in optional_keys:
-        status = "✅" if os.getenv(key) else "⚠️  Optional"
+        status = "[OK]" if os.getenv(key) else "[OPTIONAL]"
         logger.info(f"  {key}: {status}")
     
-    if not os.getenv("OPENAI_API_KEY"):
-        logger.error("Missing required OPENAI_API_KEY - cannot proceed")
+    if not os.getenv("openai_api_key"):
+        logger.error("Missing required openai_api_key – cannot proceed")
         exit(1)
     
-    logger.info("")
-    test_pipeline()
+    logger.info("Environment validation complete")
+

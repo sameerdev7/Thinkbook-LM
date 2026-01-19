@@ -343,7 +343,7 @@ def process_uploaded_files(uploaded_files):
 # --- UI COMPONENTS ---
 def render_sidebar():
     with st.sidebar:
-        st.markdown('<div class="sidebar-header">📚 Knowledge Base</div>', unsafe_allow_html=True)
+        st.markdown('<div class="sidebar-header"> Knowledge Base</div>', unsafe_allow_html=True)
         if st.session_state.sources:
             for source in st.session_state.sources:
                 st.markdown(f'''
@@ -356,13 +356,13 @@ def render_sidebar():
             st.info("No sources added yet.")
 
 def render_add_sources():
-    st.markdown("### 📂 Expand your Library")
+    st.markdown("###  Expand your Library")
     uploaded = st.file_uploader("Upload Documents or Audio", accept_multiple_files=True, type=['pdf','txt','mp3','wav','md'])
     if uploaded and st.button("Process Assets"):
         process_uploaded_files(uploaded)
         st.rerun()
     
-    t1, t2 = st.tabs(["🌐 Web", "🎥 Video"])
+    t1, t2 = st.tabs([" Web", " Video"])
     with t1:
         url = st.text_input("Website URL")
         if st.button("Scrape Site") and url:
@@ -374,7 +374,7 @@ def render_add_sources():
             st.info("Downloading transcript...")
 
 def render_chat():
-    st.markdown("### 💬 Research Insights")
+    st.markdown("###  Research Insights")
     for msg in st.session_state.chat_history:
         div_class = "user-message" if msg['role'] == 'user' else "assistant-message"
         content = msg.get('interactive_content', msg['content'])
@@ -430,7 +430,7 @@ def main():
 
     render_sidebar()
 
-    tab_library, tab_chat, tab_studio = st.tabs(["📂 Library", "💬 Research", "🎨 Studio"])
+    tab_library, tab_chat, tab_studio = st.tabs([" Library", " Research", " Studio"])
     
     with tab_library: render_add_sources()
     with tab_chat: render_chat()
