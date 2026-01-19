@@ -53,11 +53,9 @@ ThinkbookLM is an intelligent document assistant that allows you to:
 
 ## Architecture
 
-<<<<<<< HEAD
-![ThinkbookLM Architecture](assets/thinkbook_architecture.svg)
-=======
-![ThinkbookLM Architecture](assets/thinkbook-architecture.png)
->>>>>>> c70461b (minor update)
+## Architecture
+
+![ThinkbookLM Architecture](assets/thinkbook_architecture.png)
 
 ---
 
