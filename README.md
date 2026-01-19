@@ -1,101 +1,131 @@
-## ThinkbookLM
 
-An open-source implementation of a document-grounded AI assistant that provides cited, verifiable answers from your personal knowledge base. Built with modern RAG architecture, vector search, and conversational memory.
+# ThinkbookLM
 
-### Overview 
+**An open-source implementation of a document-grounded AI assistant that provides cited, verifiable answers from your personal knowledge base.**
+Built with **modern RAG architecture**, **vector search**, and **conversational memory**.
 
-ThinkbookLM is an intelligent document assistant that allows you to: 
-- Upload and process multiple document formats (PDF, TXT, Markdown, Audio, YouTube, videos, WebPages)
-- Ask questions and recieve answers backed by accurate source citations. 
-- Maintain intelligent conversational context across sesions.
-- Generate AI-powered podcast discussions from your documents. 
-- Access a clean, intuitive web interface for seamless interaction. 
+---
 
-### Key Features 
+## Overview
 
-- **Citation-First Responses: ** Every answer includes specific source references with page numbers and document metadata, ensuring full traceability of information.
-- **Intelligent Memory Layer: **  Leverages temporal knowledge graphs to maintain conversation context, user preferences, and document relationships across sessions.
-- *Multi-Format Document Support: *Seamlessly process PDFs, text files, audio recordings, YouTube videos, and web content through specialized extractors.
-- *Efficient Vector Search: *Utilizes Milvus vector database with optimized indexing for fast semantic retrieval of relevant content chunks.
-- *AI Podcast Generation: *Transform your documents into engaging multi-speaker audio conversations with script generation and text-to-speech synthesis.
+ThinkbookLM is an intelligent document assistant that allows you to:
 
+- **Upload and process multiple document formats** (PDF, TXT, Markdown, Audio, YouTube, Videos, WebPages)
+- **Ask questions and receive answers backed by accurate source citations**
+- **Maintain intelligent conversational context across sessions**
+- **Generate AI-powered podcast discussions from your documents**
+- **Access a clean, intuitive web interface for seamless interaction**
 
-### Technology Stack 
+---
 
-- *Document Processing: *PyMuPDF for PDF parsing with support for TXT and Markdown formats
-- *Audio Transcription: *AssemblyAI with speaker diarization for audio files and YouTube videos
-- *Web Scraping: *Firecrawl for intelligent content extraction from websites
-- *Vector Database: * Milvus Lite for efficient embedding storage and similarity search
-- *Memory Management: *Zep's temporal knowledge graphs for conversational context
-- *Text-to-Speech: * Kokoro open-source TTS engine for podcast audio generation
-- *Web Interface: * Streamlit for interactive document management and chat. 
-- *Embeddings: *FastEmbed with BAAI/bge-small-en-v1.5 model for vector generation
-- *Language Model: *OpenAI GPT-4 for response generation with citation report 
+## Key Features
 
-### Architecture 
+- **Citation-First Responses**  
+  Every answer includes **specific source references with page numbers and document metadata**, ensuring full traceability of information.
+
+- **Intelligent Memory Layer**  
+  Leverages **temporal knowledge graphs** to maintain conversation context, user preferences, and document relationships across sessions.
+
+- **Multi-Format Document Support**  
+  Seamlessly process PDFs, text files, audio recordings, YouTube videos, and web content through specialized extractors.
+
+- **Efficient Vector Search**  
+  Utilizes **Milvus vector database** with optimized indexing for fast semantic retrieval of relevant content chunks.
+
+- **AI Podcast Generation**  
+  Transform documents into **multi-speaker audio conversations** with script generation and text-to-speech synthesis.
+
+---
+
+## Technology Stack
+
+- **Document Processing:** PyMuPDF for PDF parsing with support for TXT and Markdown formats  
+- **Audio Transcription:** AssemblyAI with speaker diarization for audio files and YouTube videos  
+- **Web Scraping:** Firecrawl for intelligent content extraction from websites  
+- **Vector Database:** Milvus Lite for efficient embedding storage and similarity search  
+- **Memory Management:** Zep temporal knowledge graphs for conversational context  
+- **Text-to-Speech:** Kokoro open-source TTS engine for podcast audio generation  
+- **Web Interface:** Streamlit for interactive document management and chat  
+- **Embeddings:** FastEmbed with BAAI/bge-small-en-v1.5  
+- **Language Model:** OpenAI GPT-4 with citation reports
+
+---
+
+## Architecture
 
 ![ThinkbookLM Architecture](assets/architecture-diagram.svg)
 
-### System Workflow 
+---
 
-The system follows a comprehensive pipeline from document ingestion to response generation:
-1. *Document Ingestion: *Users upload documents through the web interface or provide URLs for web content and YouTube videos.
-2. *Content Processing: *Specialized processors extract text from different formats - PyMuPDF handles PDFs, AssemblyAI transcribes audio with speaker diarization, and Firecrawl scrapes web content.
-3. *Text Chunking: *Content is segmented into overlapping chunks (default 1000 characters with 200 character overlap) to maintain context while enabling precise citations. 
-4. *Embedding Generation: *FastEmbed converts text chunks into 384-dimensional vectors using the BAAI/bge-small-en-v1.5 model.
-5. *Vector Storage: *Embeddings are indexed in Milvus using IVF (Inverted File) indexing for efficient similarity search, with metadata stored for citation purposes.
-6. *Query Processing: *User queries are embedded using the same model and used to perform semantic search against the vector database.
-7. *Context Retrieval: *Top-K most relevant chunks are retrieved along with their complete metadata including source file, page numbers, and timestamps.
-8. *Response Generation: *The RAG generator creates responses using GPT-4, ensuring every factual claim is backed by citation references from the retrieved context.
-9. *Memory Management: *Zep stores conversation history, user preferences, and document usage patterns in temporal knowledge graphs for context-aware follow-up responses.
-10. *Optional Podcast Generation: *Users can transform documents into audio podcasts through script generation and multi-speaker TTS synthesis.
+## System Workflow
 
-### Installation 
+1. **Document Ingestion**  
+   Users upload documents via the web interface or provide URLs for web content and YouTube videos.
 
-#### Prerequisites 
-- Python 3.11 or 3.12
-- API keys for OpenAI, AssemblyAI, Firecrawl and Zep 
+2. **Content Processing**  
+   Specialized processors extract text from different formats:
+   - PDFs: PyMuPDF  
+   - Audio: AssemblyAI (with speaker diarization)  
+   - Web: Firecrawl
 
-#### Setup Instructions 
+3. **Text Chunking**  
+   Content is segmented into **overlapping chunks** (default: 1000 characters with 200 overlap) to preserve context and enable precise citations.
 
-1. Install UV Package Manager 
+4. **Embedding Generation**  
+   FastEmbed converts chunks into **384-dimensional vectors** using BAAI/bge-small-en-v1.5.
 
-```bash 
-# MacOS/Linux
-curl -LsSf https://astral.sh/uv/install.sh | sh
+5. **Vector Storage**  
+   Embeddings are indexed in Milvus using **IVF indexing**, with metadata stored for citation.
 
-# Windows
-powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"
+6. **Query Processing**  
+   User queries are embedded using the same model and matched via semantic search.
 
-```
+7. **Context Retrieval**  
+   Top-K relevant chunks are retrieved with full metadata (file, page numbers, timestamps).
 
-2. Create project environement: 
+8. **Response Generation**  
+   GPT-4 generates answers where **every factual claim is citation-backed**.
+
+9. **Memory Management**  
+   Zep stores conversation history, preferences, and document usage patterns.
+
+10. **Optional Podcast Generation**  
+    Documents can be converted into audio podcasts using scripted multi-speaker TTS.
+
+---
+
+## Installation
+
+### Prerequisites
+
+- **Python 3.11 or 3.12**
+- API keys for **OpenAI**, **AssemblyAI**, **Firecrawl**, and **Zep**
+
+### Setup Instructions
 
 ```bash
-# Clone the project 
+# Clone the repository
 https://github.com/sameerdev7/Thinkbook-LM.git
 
-# Enter the directory
+# Enter directory
 cd thinkbook-lm
 
-# Initialize virtual environment
+# Create virtual environment
 uv venv
-source .venv/bin/activate  # MacOS/Linux
+source .venv/bin/activate    # MacOS/Linux
 .venv\Scripts\activate     # Windows
 
 # Install dependencies
 uv sync
 
-# Install additional tools
+# Additional tools
 uv add -U yt-dlp
 uv pip install pip
 ```
-```
 
-3. Configure environment variables 
+### Environment Variables
 
-Create a .env file in the project root: 
-
+Create a `.env` file in the project root:
 
 ```bash
 OPENAI_API_KEY=your_openai_key
@@ -104,55 +134,50 @@ FIRECRAWL_API_KEY=your_firecrawl_key
 ZEP_API_KEY=your_zep_key
 ```
 
-### Usage 
+---
 
-#### Starting the Application 
+## Usage
 
-```bash 
+### Start the Application
+
+```bash
 streamlit run app.py
 ```
 
-The application will launch at `http://localhost:8501`
+Application runs at: `http://localhost:8501`
 
-### Using ThinkbookLM
+---
 
-**Library Tab**: Upload documents by dragging files or clicking the browse button. Supported formats include PDF, TXT, MD, MP3, WAV, and M4A. You can also add web pages via URL or transcribe YouTube videos.
+## Interface Guide
 
-**Research Tab**: Ask questions about your documents in the chat interface. Responses include interactive citation numbers that display source context on hover.
+- **Library Tab:** Upload documents or URLs (PDF, TXT, MD, MP3, WAV, M4A, YouTube)
+- **Research Tab:** Ask questions and receive answers with interactive citations
+- **Studio Tab:** Generate AI podcasts with selectable style and length
 
-**Studio Tab**: Generate AI podcasts from your documents. Select source material, choose a conversational style, and set the desired length.
+---
 
 ## Project Structure
-```
+
+```text
 thinkbook-lm/
 ├── src/
 │   ├── audio_processing/
-│   │   ├── audio_transcriber.py      # AssemblyAI transcription
-│   │   └── youtube_transcriber.py    # YouTube video processing
 │   ├── document_processing/
-│   │   └── doc_processor.py          # PDF, TXT, MD parsing
 │   ├── embeddings/
-│   │   └── embedding_generator.py    # Vector generation
 │   ├── generation/
-│   │   └── rag.py                    # RAG pipeline
 │   ├── memory/
-│   │   └── memory_layer.py           # Zep integration
 │   ├── podcast/
-│   │   ├── script_generator.py       # Dialogue creation
-│   │   └── text_to_speech.py         # Audio synthesis
 │   ├── vector_database/
-│   │   └── milvus_vector_db.py       # Vector storage
 │   └── web_scraping/
-│       └── web_scraper.py            # Web content extraction
-├── data/                              # Sample documents
-├── outputs/                           # Generated content
-├── tests/                             # Test suites
-├── app.py                             # Main application
-├── pyproject.toml                     # Dependencies
-└── .env.example                       # Configuration template
+├── data/
+├── outputs/
+├── tests/
+├── app.py
+├── pyproject.toml
+└── .env.example
 ```
 
-### Core Components 
+---
 
 #### Document Processing 
 
@@ -173,12 +198,3 @@ Zep maintains conversational context through temporal knowledge graphs that capt
 #### Podcast Generation 
 
 The podcast studio transforms documents into audio content through a two-stage process. First, GPT-4 generates conversational scripts between two speakers with natural dialogue flow and topic coverage. Second, Kokoro TTS synthesizes audio with distinct male and female voices, appropriate pacing, and automatic segment combination with pauses. 
-
-
-```
-```
-```
-```
-```
-```
-```
