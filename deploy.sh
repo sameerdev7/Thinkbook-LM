@@ -78,7 +78,7 @@ EOF
   fi
 
   echo "🚀 Starting with docker-compose..."
-  docker-compose up --build
+  docker compose up --build
   ;;
 
 4)
