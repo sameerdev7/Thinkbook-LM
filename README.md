@@ -18,6 +18,11 @@ ThinkbookLM is an intelligent document assistant that allows you to:
 
 ---
 
+## UI Interface 
+
+![User Interface](assets/UI-Interface.png)
+
+
 ## Key Features
 
 - **Citation-First Responses**  
@@ -53,9 +58,14 @@ ThinkbookLM is an intelligent document assistant that allows you to:
 
 ## Architecture
 
+<<<<<<< HEAD
 ## Architecture
 
 ![ThinkbookLM Architecture](assets/thinkbook_architecture.png)
+=======
+![ThinkbookLM Architecture](assets/thinkbook_architecture.png)
+
+>>>>>>> 9c122ce (Added ui diagram)
 
 ---
 
