@@ -12,11 +12,15 @@ logger = logging.getLogger(__name__)
 
 class MilvusVectorDB:
     def __init__(
-        self, 
+        self,
         db_path: str = "./milvus_lite.db",
-        collection_name: str = "notebook_lm",
+        collection_name = None,
         embedding_dim: int = 384
     ):
+        if collection_name is None:
+            raise ValueError("collection_name must be provided (multi-tenant required)")
+
+        self.collection_name = collection_name
         self.db_path = db_path
         self.collection_name = collection_name
         self.embedding_dim = embedding_dim

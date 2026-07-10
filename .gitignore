@@ -1,13 +1,25 @@
 # Milvus Lite database files
 milvus_lite_*.db
 
-# (optional but recommended) Python cache
+# Python
 __pycache__/
 *.pyc
+.venv/
+venv/
+*.egg-info/
 
+# Env / secrets
 .env
 
-backup/
-*.db.lock
+# Runtime data (backend)
+*.db
+milvus_data/
+outputs/
 
-./deploy.sh
+# Node / frontend
+node_modules/
+dist/
+.vite/
+
+# Editor/OS noise
+.DS_Store
