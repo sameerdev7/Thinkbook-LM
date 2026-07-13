@@ -140,16 +140,16 @@ export function SourcesPanel({ sessionId }: { sessionId: string }) {
   return (
     <div className="flex h-full flex-col">
       <div className="flex items-center justify-between border-b border-border p-4">
-        <h2 className="text-sm font-semibold tracking-tight">Sources</h2>
+        <h2 className="text-base font-semibold tracking-tight">Sources</h2>
         <Popover>
           <PopoverTrigger asChild>
-            <Button size="sm" variant="secondary" className="h-7 gap-1 px-2 text-xs">
+            <Button size="sm" variant="secondary" className="h-7 gap-1 px-2 text-sm">
               <Plus className="h-3.5 w-3.5" /> Add
             </Button>
           </PopoverTrigger>
           <PopoverContent align="end" className="w-72 space-y-3">
             <div className="space-y-1.5">
-              <div className="text-xs font-medium text-muted-foreground">Upload</div>
+              <div className="text-sm font-medium text-muted-foreground">Upload</div>
               <div className="flex gap-2">
                 <Button
                   size="sm"
@@ -187,25 +187,25 @@ export function SourcesPanel({ sessionId }: { sessionId: string }) {
                 </Button>
               </div>
               {!features.document_upload && (
-                <p className="text-[11px] text-muted-foreground">
+                <p className="text-xs text-muted-foreground">
                   Document upload is not configured on the server.
                 </p>
               )}
               {!features.audio_upload && (
-                <p className="text-[11px] text-muted-foreground">
+                <p className="text-xs text-muted-foreground">
                   Audio upload is not configured on the server.
                 </p>
               )}
             </div>
             <div className="space-y-1.5">
-              <div className="text-xs font-medium text-muted-foreground">YouTube</div>
+              <div className="text-sm font-medium text-muted-foreground">YouTube</div>
               <div className="flex gap-2">
                 <Input
                   placeholder="https://youtube.com/…"
                   value={ytUrl}
                   onChange={(e) => setYtUrl(e.target.value)}
                   disabled={!features.youtube}
-                  className="h-8 text-xs"
+                  className="h-8 text-sm"
                 />
                 <Button
                   size="sm"
@@ -216,20 +216,20 @@ export function SourcesPanel({ sessionId }: { sessionId: string }) {
                 </Button>
               </div>
               {!features.youtube && (
-                <p className="text-[11px] text-muted-foreground">
+                <p className="text-xs text-muted-foreground">
                   YouTube ingestion is not configured.
                 </p>
               )}
             </div>
             <div className="space-y-1.5">
-              <div className="text-xs font-medium text-muted-foreground">Web page</div>
+              <div className="text-sm font-medium text-muted-foreground">Web page</div>
               <div className="flex gap-2">
                 <Input
                   placeholder="https://…"
                   value={webUrl}
                   onChange={(e) => setWebUrl(e.target.value)}
                   disabled={!features.web_scraping}
-                  className="h-8 text-xs"
+                  className="h-8 text-sm"
                 />
                 <Button
                   size="sm"
@@ -240,7 +240,7 @@ export function SourcesPanel({ sessionId }: { sessionId: string }) {
                 </Button>
               </div>
               {!features.web_scraping && (
-                <p className="text-[11px] text-muted-foreground">
+                <p className="text-xs text-muted-foreground">
                   Web scraping is not configured.
                 </p>
               )}
@@ -273,7 +273,7 @@ export function SourcesPanel({ sessionId }: { sessionId: string }) {
 
       <div className="flex-1 overflow-y-auto p-3">
         {error && (
-          <p className="mb-2 text-xs text-destructive" role="alert">{error}</p>
+          <p className="mb-2 text-sm text-destructive" role="alert">{error}</p>
         )}
         {activeJobs.length > 0 && (
           <div className="mb-3 space-y-2">
@@ -283,9 +283,9 @@ export function SourcesPanel({ sessionId }: { sessionId: string }) {
           </div>
         )}
         {loading ? (
-          <div className="text-xs text-muted-foreground">Loading…</div>
+          <div className="text-sm text-muted-foreground">Loading…</div>
         ) : sources.length === 0 ? (
-          <div className="rounded-md border border-dashed border-border p-6 text-center text-xs text-muted-foreground">
+          <div className="rounded-md border border-dashed border-border p-6 text-center text-sm text-muted-foreground">
             No sources yet. Add documents, audio, YouTube, or web pages.
           </div>
         ) : (
@@ -297,12 +297,12 @@ export function SourcesPanel({ sessionId }: { sessionId: string }) {
               return (
                 <li
                   key={s.id}
-                  className="flex items-start gap-2 rounded-md p-2 text-xs hover:bg-accent"
+                  className="flex items-start gap-2 rounded-md p-2 text-sm hover:bg-accent"
                 >
                   <Icon className="mt-0.5 h-3.5 w-3.5 shrink-0 text-primary" />
                   <div className="min-w-0 flex-1">
                     <div className="truncate font-medium text-foreground">{name}</div>
-                    <div className="truncate text-[11px] text-muted-foreground">
+                    <div className="truncate text-xs text-muted-foreground">
                       {s.source_type}
                     </div>
                   </div>

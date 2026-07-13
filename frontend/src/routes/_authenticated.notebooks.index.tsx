@@ -41,8 +41,8 @@ function NotebooksPage() {
     <div className="mx-auto w-full max-w-5xl p-6 sm:p-10">
       <div className="mb-8 flex items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-semibold tracking-tight">Your notebooks</h1>
-          <p className="mt-1 text-sm text-muted-foreground">
+          <h1 className="text-3xl font-semibold tracking-tight">Your notebooks</h1>
+          <p className="mt-1 text-base text-muted-foreground">
             Collect sources, chat with them, and generate briefings.
           </p>
         </div>
@@ -53,15 +53,15 @@ function NotebooksPage() {
       </div>
 
       {error && (
-        <p className="mb-4 text-sm text-destructive" role="alert">{error}</p>
+        <p className="mb-4 text-base text-destructive" role="alert">{error}</p>
       )}
 
       {sessions === null ? (
-        <div className="text-sm text-muted-foreground">Loading…</div>
+        <div className="text-base text-muted-foreground">Loading…</div>
       ) : sessions.length === 0 ? (
         <div className="rounded-lg border border-dashed border-border p-12 text-center">
           <FileText className="mx-auto mb-3 h-8 w-8 text-muted-foreground" />
-          <p className="text-sm text-muted-foreground">
+          <p className="text-base text-muted-foreground">
             No notebooks yet. Create your first one to get started.
           </p>
         </div>
@@ -79,10 +79,10 @@ function NotebooksPage() {
                   <FileText className="h-4 w-4 text-primary" />
                 </div>
                 <div className="min-w-0 flex-1">
-                  <div className="truncate text-sm font-medium">
+                  <div className="truncate text-base font-medium">
                     {s.title || s.name || "Untitled notebook"}
                   </div>
-                  <div className="mt-1 truncate text-xs text-muted-foreground">
+                  <div className="mt-1 truncate text-sm text-muted-foreground">
                     {s.updated_at
                       ? new Date(s.updated_at).toLocaleString()
                       : s.id.slice(0, 8)}

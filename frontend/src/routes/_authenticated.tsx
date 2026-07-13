@@ -24,6 +24,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { LogOut, User2, BookOpen } from "lucide-react";
 import { FeaturesContext, defaultFeatures } from "@/lib/features-context";
+import { ThemeToggle } from "@/components/theme-toggle";
 
 export const Route = createFileRoute("/_authenticated")({
   component: AuthenticatedLayout,
@@ -90,17 +91,19 @@ function AuthenticatedLayout() {
         <header className="flex h-14 shrink-0 items-center justify-between border-b border-border bg-sidebar px-4">
           <Link
             to="/notebooks"
-            className="flex items-center gap-2 text-sm font-semibold tracking-tight"
+            className="flex items-center gap-2 text-base font-semibold tracking-tight"
           >
             <BookOpen className="h-4 w-4 text-primary" />
             ThinkbookLM
             {pathname !== "/notebooks" && (
-              <span className="ml-2 text-xs font-normal text-muted-foreground">
+              <span className="ml-2 text-sm font-normal text-muted-foreground">
                 / Notebook
               </span>
             )}
           </Link>
-          <DropdownMenu>
+          <div className="flex items-center gap-1">
+            <ThemeToggle />
+            <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button
                 variant="ghost"
@@ -122,7 +125,8 @@ function AuthenticatedLayout() {
                 <LogOut className="mr-2 h-4 w-4" /> Sign out
               </DropdownMenuItem>
             </DropdownMenuContent>
-          </DropdownMenu>
+            </DropdownMenu>
+          </div>
         </header>
         <div className="flex min-h-0 flex-1">
           <Outlet />

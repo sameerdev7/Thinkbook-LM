@@ -112,21 +112,21 @@ export function StudioPanel({ sessionId }: { sessionId: string }) {
   return (
     <div className="flex h-full flex-col">
       <div className="border-b border-border p-4">
-        <h2 className="text-sm font-semibold tracking-tight">Studio</h2>
-        <p className="mt-0.5 text-xs text-muted-foreground">
+        <h2 className="text-base font-semibold tracking-tight">Studio</h2>
+        <p className="mt-0.5 text-sm text-muted-foreground">
           Generate an audio briefing from your sources.
         </p>
       </div>
       <div className="flex-1 space-y-4 overflow-y-auto p-4">
         <section className="space-y-2">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2 text-xs font-medium">
+            <div className="flex items-center gap-2 text-sm font-medium">
               <Mic className="h-3.5 w-3.5 text-primary" /> Script
             </div>
             <Button
               size="sm"
               variant="secondary"
-              className="h-7 text-xs"
+              className="h-7 text-sm"
               disabled={scriptDisabled || generating}
               onClick={generateScript}
               title={scriptDisabled ? "Podcast script not configured" : undefined}
@@ -138,7 +138,7 @@ export function StudioPanel({ sessionId }: { sessionId: string }) {
             </Button>
           </div>
           {scriptDisabled && (
-            <p className="text-[11px] text-muted-foreground">
+            <p className="text-xs text-muted-foreground">
               Podcast script generation is not configured on the server.
             </p>
           )}
@@ -149,18 +149,18 @@ export function StudioPanel({ sessionId }: { sessionId: string }) {
             value={scriptText}
             onChange={(e) => setScriptText(e.target.value)}
             placeholder='Speaker 1: Welcome…\nSpeaker 2: Today we discuss…'
-            className="min-h-[180px] resize-y font-mono text-xs"
+            className="min-h-[180px] resize-y font-mono text-sm"
           />
         </section>
 
         <section className="space-y-2">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2 text-xs font-medium">
+            <div className="flex items-center gap-2 text-sm font-medium">
               <AudioLines className="h-3.5 w-3.5 text-primary" /> Audio
             </div>
             <Button
               size="sm"
-              className="h-7 text-xs"
+              className="h-7 text-sm"
               disabled={audioDisabled || rendering || !scriptText.trim()}
               onClick={renderAudio}
               title={audioDisabled ? "Podcast audio not configured" : undefined}
@@ -170,7 +170,7 @@ export function StudioPanel({ sessionId }: { sessionId: string }) {
             </Button>
           </div>
           {audioDisabled && (
-            <p className="text-[11px] text-muted-foreground">
+            <p className="text-xs text-muted-foreground">
               Podcast audio rendering is not configured on the server.
             </p>
           )}
@@ -184,7 +184,7 @@ export function StudioPanel({ sessionId }: { sessionId: string }) {
                 <a
                   href={audioUrl}
                   download
-                  className="inline-flex items-center gap-1 text-xs text-primary hover:underline"
+                  className="inline-flex items-center gap-1 text-sm text-primary hover:underline"
                 >
                   <Download className="h-3 w-3" /> Download
                 </a>
@@ -194,7 +194,7 @@ export function StudioPanel({ sessionId }: { sessionId: string }) {
         </section>
 
         {error && (
-          <p className="text-xs text-destructive" role="alert">{error}</p>
+          <p className="text-sm text-destructive" role="alert">{error}</p>
         )}
       </div>
     </div>

@@ -53,12 +53,12 @@ function CitationChip({
           onMouseEnter={load}
           onFocus={load}
           onClick={load}
-          className="mx-0.5 inline-flex h-4 min-w-[1.1rem] items-center justify-center rounded border border-primary/40 bg-primary/10 px-1 text-[10px] font-medium text-primary hover:bg-primary/20"
+          className="mx-0.5 inline-flex h-4 min-w-[1.1rem] items-center justify-center rounded border border-primary/40 bg-primary/10 px-1 text-xs font-medium text-primary hover:bg-primary/20"
         >
           {label}
         </button>
       </HoverCardTrigger>
-      <HoverCardContent side="top" className="w-80 space-y-2 text-xs">
+      <HoverCardContent side="top" className="w-80 space-y-2 text-sm">
         <div className="flex items-center justify-between gap-2">
           <span className="truncate font-medium">
             {source.source_file || source.source_type}
@@ -70,7 +70,7 @@ function CitationChip({
         <div className="max-h-48 overflow-y-auto rounded-md bg-muted p-2 leading-relaxed text-foreground/90">
           {loading ? "Loading…" : error ? error : (chunk?.content ?? "No preview")}
         </div>
-        <div className="text-[10px] text-muted-foreground">
+        <div className="text-xs text-muted-foreground">
           relevance {(source.relevance_score ?? 0).toFixed(2)}
         </div>
       </HoverCardContent>
@@ -146,10 +146,10 @@ export function ChatPanel({ sessionId }: { sessionId: string }) {
               <div className="mx-auto mb-3 flex h-10 w-10 items-center justify-center rounded-full bg-secondary">
                 <Sparkles className="h-5 w-5 text-primary" />
               </div>
-              <h3 className="text-base font-medium">Ask across your sources</h3>
-              <p className="mt-1 text-sm text-muted-foreground">
+              <h3 className="text-lg font-medium">Ask across your sources</h3>
+              <p className="mt-1 text-base text-muted-foreground">
                 Answers come with inline citations. Hover any{" "}
-                <span className="mx-0.5 inline-flex h-4 min-w-[1.1rem] items-center justify-center rounded border border-primary/40 bg-primary/10 px-1 text-[10px] font-medium text-primary">
+                <span className="mx-0.5 inline-flex h-4 min-w-[1.1rem] items-center justify-center rounded border border-primary/40 bg-primary/10 px-1 text-xs font-medium text-primary">
                   1
                 </span>{" "}
                 to see the source passage.
@@ -160,14 +160,14 @@ export function ChatPanel({ sessionId }: { sessionId: string }) {
           <div className="mx-auto max-w-3xl space-y-6 p-6">
             {messages.map((m) => (
               <div key={m.id} className="space-y-1.5">
-                <div className="text-[11px] font-medium uppercase tracking-wide text-muted-foreground">
+                <div className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
                   {m.role === "user" ? "You" : "Thinkbook"}
                 </div>
                 <div
                   className={
                     m.role === "user"
-                      ? "whitespace-pre-wrap rounded-lg border border-border bg-card p-3 text-sm"
-                      : "whitespace-pre-wrap text-sm leading-relaxed text-foreground"
+                      ? "whitespace-pre-wrap rounded-lg border border-border bg-card p-3 text-base"
+                      : "whitespace-pre-wrap text-base leading-relaxed text-foreground"
                   }
                 >
                   {m.role === "assistant"
@@ -177,7 +177,7 @@ export function ChatPanel({ sessionId }: { sessionId: string }) {
               </div>
             ))}
             {sending && (
-              <div className="flex items-center gap-2 text-xs text-muted-foreground">
+              <div className="flex items-center gap-2 text-sm text-muted-foreground">
                 <Loader2 className="h-3.5 w-3.5 animate-spin" /> Thinking…
               </div>
             )}
@@ -189,12 +189,12 @@ export function ChatPanel({ sessionId }: { sessionId: string }) {
       <div className="border-t border-border bg-sidebar/50 p-3">
         <div className="mx-auto max-w-3xl">
           {!features.chat && (
-            <p className="mb-2 text-xs text-muted-foreground">
+            <p className="mb-2 text-sm text-muted-foreground">
               Chat is not configured on the server.
             </p>
           )}
           {error && (
-            <p className="mb-2 text-xs text-destructive" role="alert">{error}</p>
+            <p className="mb-2 text-sm text-destructive" role="alert">{error}</p>
           )}
           <div className="flex items-end gap-2 rounded-lg border border-border bg-card p-2">
             <Textarea
@@ -211,7 +211,7 @@ export function ChatPanel({ sessionId }: { sessionId: string }) {
               }
               disabled={!features.chat}
               rows={1}
-              className="min-h-[36px] resize-none border-0 bg-transparent px-1 text-sm shadow-none focus-visible:ring-0"
+              className="min-h-[36px] resize-none border-0 bg-transparent px-1 text-base shadow-none focus-visible:ring-0"
             />
             <Button
               size="icon"

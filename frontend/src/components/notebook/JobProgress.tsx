@@ -8,7 +8,7 @@ export function JobProgress({ job, label }: { job: Job | null; label?: string })
   const isFailed = job.status === "failed";
   return (
     <div className="space-y-1.5 rounded-md border border-border bg-card p-3">
-      <div className="flex items-center justify-between text-xs">
+      <div className="flex items-center justify-between text-sm">
         <span className="font-medium text-foreground">{label ?? job.job_type}</span>
         <span
           className={
@@ -23,7 +23,7 @@ export function JobProgress({ job, label }: { job: Job | null; label?: string })
         </span>
       </div>
       <Progress value={pct} className="h-1.5" />
-      <p className="truncate text-xs text-muted-foreground">
+      <p className="truncate text-sm text-muted-foreground">
         {job.error ?? job.step_message ?? "\u00A0"}
       </p>
     </div>
