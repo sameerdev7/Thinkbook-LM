@@ -1,0 +1,62 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+.venv/
+venv/
+env/
+ENV/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Environment / secrets -- never bake these into an image
+.env
+.env.*
+!.env.example
+
+# Runtime data -- these are mounted as volumes, not baked into the image
+*.db
+*.db.lock
+milvus_data/
+outputs/
+data/
+
+# Frontend -- backend image doesn't need any of this (separate frontend
+# Dockerfile handles that build)
+frontend/
+
+# Git
+.git/
+.gitignore
+
+# Old / irrelevant to the backend image
+backup/
+tests/
+*.log
+assets/
+
+# Docker itself
+Dockerfile
+docker-compose.yml
+docker/
+
+# IDE / OS
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# Docs (README is useful to keep out of the runtime image, not needed at runtime)
+README.md
+docs/

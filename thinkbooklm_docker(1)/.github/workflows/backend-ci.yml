@@ -1,0 +1,72 @@
+name: Backend CI
+
+on:
+  push:
+    branches: [master, main]
+  pull_request:
+    branches: [master, main]
+
+jobs:
+  lint-and-syntax:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install lint tools
+        run: pip install ruff
+
+      - name: Ruff (lint)
+        # Non-blocking for now -- this repo hasn't been ruff-clean end to end
+        # yet. Flip to a hard failure once a pass has been done to fix
+        # existing findings; until then this just surfaces new problems in
+        # the CI log without blocking merges on pre-existing issues.
+        run: ruff check app/ --exit-zero
+
+      - name: Python syntax check (py_compile)
+        run: python -m py_compile app/*.py app/auth/*.py app/routers/*.py
+
+  migration-check:
+    runs-on: ubuntu-latest
+    needs: lint-and-syntax
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      # Full dependency install (torch/transformers/etc.) is slow and mostly
+      # irrelevant here -- Alembic only needs SQLAlchemy + the app's own
+      # modules to import cleanly. Installing just what env.py actually
+      # imports keeps this job fast without pulling in the whole ML stack.
+      - name: Install minimal deps for migration check
+        run: |
+          pip install sqlalchemy alembic pydantic-settings "pydantic[email]" \
+                      bcrypt pyjwt fastapi
+
+      - name: Run alembic upgrade head against a throwaway SQLite DB
+        env:
+          JWT_SECRET_KEY: ci-test-secret
+          DATABASE_URL: "sqlite:///./ci_test.db"
+        run: |
+          alembic upgrade head
+          echo "Migration succeeded -- verifying downgrade path too"
+          alembic downgrade base
+          alembic upgrade head
+
+  docker-build:
+    runs-on: ubuntu-latest
+    needs: lint-and-syntax
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build image (no push -- just confirms it builds)
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: false
+          tags: thinkbooklm-backend:ci

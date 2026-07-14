@@ -22,6 +22,8 @@ class NotebookSession(Base):
     id = Column(String(36), primary_key=True, default=_uuid)
     user_id = Column(String(36), ForeignKey("users.id"), nullable=False, index=True)
 
+    name = Column(String(256), nullable=False, default="Untitled notebook")
+
     # Where this session's vector data lives. Persisted so we can reconnect
     # after a server restart instead of silently creating a fresh, empty DB.
     milvus_db_path = Column(String(512), nullable=False)

@@ -7,10 +7,43 @@ from app.deps import get_session_row, get_pipeline_cache, get_current_user
 from app.auth.models import User
 from app.models import NotebookSession, Source
 from app.pipeline_manager import new_milvus_paths, SessionPipelineCache
-from app.schemas import SessionCreate, SessionOut, SourceOut
+from app.schemas import SessionCreate, SessionUpdate, SessionOut, SourceOut
 
 logger = logging.getLogger(__name__)
 router = APIRouter(tags=["sessions"])
+
+
+@router.post("/sessions", response_model=SessionOut, status_code=201)
+def create_session(payload: SessionCreate, db: DBSession = Depends(get_db), current_user: User = Depends(get_current_user)):
+    session_row = NotebookSession(
+        user_id=current_user.id,
+        name=(payload.name or "Untitled notebook").strip() or "Untitled notebook",
+        milvus_db_path="", milvus_collection_name="",
+    )
+    db.add(session_row)
+    db.flush()  # get session_row.id populated before building paths
+
+    db_path, collection_name = new_milvus_paths(session_row.id)
+    session_row.milvus_db_path = db_path
+    session_row.milvus_collection_name = collection_name
+    db.commit()
+    db.refresh(session_row)
+    return session_row
+
+
+@router.patch("/sessions/{session_id}", response_model=SessionOut)
+def rename_session(
+    payload: SessionUpdate,
+    session_row: NotebookSession = Depends(get_session_row),
+    db: DBSession = Depends(get_db),
+):
+    name = payload.name.strip()
+    if not name:
+        raise HTTPException(status_code=422, detail="Name can't be empty")
+    session_row.name = name
+    db.commit()
+    db.refresh(session_row)
+    return session_row
 
 
 @router.get("/sessions", response_model=list[SessionOut])
@@ -21,20 +54,6 @@ def list_sessions(current_user: User = Depends(get_current_user), db: DBSession 
         .order_by(NotebookSession.last_active_at.desc())
         .all()
     )
-
-
-@router.post("/sessions", response_model=SessionOut, status_code=201)
-def create_session(payload: SessionCreate, db: DBSession = Depends(get_db), current_user: User = Depends(get_current_user)):
-    session_row = NotebookSession(user_id=current_user.id, milvus_db_path="", milvus_collection_name="")
-    db.add(session_row)
-    db.flush()  # get session_row.id populated before building paths
-
-    db_path, collection_name = new_milvus_paths(session_row.id)
-    session_row.milvus_db_path = db_path
-    session_row.milvus_collection_name = collection_name
-    db.commit()
-    db.refresh(session_row)
-    return session_row
 
 
 @router.get("/sessions/{session_id}", response_model=SessionOut)

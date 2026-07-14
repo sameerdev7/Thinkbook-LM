@@ -6,13 +6,18 @@ from pydantic import BaseModel, HttpUrl, ConfigDict
 # ---------- Sessions ----------
 
 class SessionCreate(BaseModel):
-    pass  # nothing needed from the client -- owner comes from the auth token
+    name: Optional[str] = None  # defaults to "Untitled notebook" server-side if omitted
+
+
+class SessionUpdate(BaseModel):
+    name: str
 
 
 class SessionOut(BaseModel):
     model_config = ConfigDict(from_attributes=True)
     id: str
     user_id: str
+    name: str
     created_at: datetime
     last_active_at: datetime
 
