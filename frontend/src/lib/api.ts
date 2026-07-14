@@ -113,6 +113,8 @@ export const api = {
     request<T>(path, { ...opts, method: "POST", body }),
   postForm: <T>(path: string, formData: FormData, opts?: Omit<ApiOptions, "method" | "body" | "formData">) =>
     request<T>(path, { ...opts, method: "POST", formData }),
+  patch: <T>(path: string, body?: unknown, opts?: Omit<ApiOptions, "method" | "body">) =>
+    request<T>(path, { ...opts, method: "PATCH", body }),
   del: <T>(path: string, opts?: Omit<ApiOptions, "method" | "body">) =>
     request<T>(path, { ...opts, method: "DELETE" }),
 };
@@ -120,8 +122,8 @@ export const api = {
 // Domain types
 export interface Session {
   id: string;
-  title?: string;
   name?: string;
+  title?: string;
   created_at?: string;
   updated_at?: string;
   [k: string]: unknown;
